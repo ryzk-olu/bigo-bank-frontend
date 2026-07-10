@@ -1,4 +1,4 @@
-# BigO Bank Frontend
+# BigO-Bank Frontend
 
 A Single Page Application (SPA) that simulates an online banking client. The project is built with **React**, **TypeScript**, **Vite**, and **Tailwind CSS**, following a modular architecture and prepared for future integration with a **FastAPI** backend.
 
