@@ -31,33 +31,6 @@ A Single Page Application (SPA) that simulates an online banking client. The pro
 * React Router DOM
 * Context API
 
-Install:
-
-```bash
-npm install react-router-dom
-```
-
-### Development
-
-```text
-typescript
-vite
-tailwindcss
-@tailwindcss/vite
-eslint
-@eslint/js
-typescript-eslint
-@vitejs/plugin-react
-```
-
-Install all dependencies:
-
-```bash
-npm install
-```
-
----
-
 ## Getting Started
 
 Install dependencies:
