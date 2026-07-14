@@ -26,11 +26,15 @@ import type {
   Currency,
 } from "../types/account";
 
+import {
+  MOCK_EXCHANGE_RATES,
+} from "../mocks/exchangeRates";
 
+import type {
+  ExchangeRate,
+} from "../types/exchangeRate";
 
 const NETWORK_DELAY_MS = 1000;
-
-
 
 const simulateNetwork = <T>(
   data: T
@@ -44,8 +48,14 @@ const simulateNetwork = <T>(
 
   });
 
+export async function fetchExchangeRates()
+: Promise<ExchangeRate[]> {
 
+  return simulateNetwork(
+    MOCK_EXCHANGE_RATES
+  );
 
+}
 
 export async function login({
   username,

@@ -11,8 +11,8 @@ import {
 } from "../context/AccountContext";
 
 import AccountsList from "../components/accounts/AccountsList";
-
 import OpenAccountModal from "../components/accounts/OpenAccountModal";
+import ExchangeRatesWidget from "../components/accounts/ExchangeRatesWidget";
 
 import type {
   Currency,
@@ -29,6 +29,7 @@ export default function Dashboard() {
 
   const {
     accounts,
+    exchangeRates,
     isLoading,
     deposit,
     openAccount,
@@ -167,50 +168,44 @@ export default function Dashboard() {
 
 
 
-      <section>
+  <section>
 
-        <h2
-          className="
-            text-2xl
-            font-semibold
-            text-text
-            mb-4
-          "
-        >
-          My Accounts
-        </h2>
+    <h2 className="text-2xl font-semibold text-text mb-4">
+      My Accounts
+    </h2>
 
 
+    <div className="flex gap-6 items-start">
 
-        <AccountsList
-          accounts={accounts}
-          onDeposit={handleDeposit}
-        />
+      <AccountsList
+        accounts={accounts}
+        onDeposit={handleDeposit}
+      />
 
+      <ExchangeRatesWidget
+        rates={exchangeRates}
+      />
 
-
-        <button
-          type="button"
-          onClick={() =>
-            setIsModalOpen(true)
-          }
-          className="
-            mt-4
-            bg-primary
-            hover:bg-primary-dark
-            text-white
-            rounded-lg
-            px-5
-            py-2
-          "
-        >
-          + Add new
-        </button>
+    </div>
 
 
-      </section>
+    <button
+      type="button"
+      onClick={() => setIsModalOpen(true)}
+      className="
+        mt-4
+        bg-primary
+        hover:bg-primary-dark
+        text-white
+        rounded-lg
+        px-5
+        py-2
+      "
+    >
+      + Add new
+    </button>
 
-
+  </section>
 
       <OpenAccountModal
         isOpen={isModalOpen}
