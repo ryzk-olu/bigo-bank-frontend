@@ -9,6 +9,7 @@ import {
 
 import {
   fetchAccounts,
+  fetchExchangeRates,
   createAccount,
   deposit as depositRequest,
 } from "../services/api";
@@ -18,20 +19,22 @@ import type {
   Currency,
 } from "../types/account";
 
+import type {
+  ExchangeRate,
+} from "../types/exchangeRate";
+
 
 interface AccountContextValue {
 
   accounts: Account[];
 
+  exchangeRates: ExchangeRate[];
+
   isLoading: boolean;
 
-  openAccount(
-    currency: Currency
-  ): Promise<void>;
+  openAccount(currency: Currency): Promise<void>;
 
-  deposit(
-    accountId: number
-  ): Promise<void>;
+  deposit(accountId: number): Promise<void>;
 
 }
 
@@ -43,9 +46,7 @@ const AccountContext =
 
 
 interface AccountProviderProps {
-
   children: ReactNode;
-
 }
 
 
@@ -58,68 +59,74 @@ export function AccountProvider({
     setAccounts,
   ] = useState<Account[]>([]);
 
-
   const [
     isLoading,
     setIsLoading,
   ] = useState(true);
 
+  const [
+    exchangeRates,
+    setExchangeRates,
+  ] = useState<ExchangeRate[]>([]);
+
 
   useEffect(() => {
 
-    async function loadAccounts() {
+    async function loadData() {
 
-      const data =
-        await fetchAccounts();
+      const [
+        accountsData,
+        ratesData,
+      ] = await Promise.all([
+        fetchAccounts(),
+        fetchExchangeRates(),
+      ]);
 
-      setAccounts(data);
+      setAccounts(accountsData);
+
+      setExchangeRates(ratesData);
 
       setIsLoading(false);
 
     }
 
-    loadAccounts();
+    loadData();
 
   }, []);
 
 
-async function openAccount(
-  currency: Currency
-) {
+  async function openAccount(
+    currency: Currency
+  ) {
 
-  const accountExists =
-    accounts.some(
-      (account) =>
-        account.currency === currency
-    );
+    const accountExists =
+      accounts.some(
+        (account) =>
+          account.currency === currency
+      );
 
+    if (accountExists) {
 
-  if (accountExists) {
+      throw new Error(
+        `Account ${currency} already exists.`
+      );
 
-    throw new Error(
-      `Account ${currency} already exists.`
+    }
+
+    const account =
+      await createAccount(currency);
+
+    setAccounts(
+      (previous) => [
+
+        ...previous,
+
+        account,
+
+      ]
     );
 
   }
-
-
-
-  const account =
-    await createAccount(currency);
-
-
-
-  setAccounts(
-    (previous) => [
-
-      ...previous,
-
-      account,
-
-    ]
-  );
-
-}
 
 
   async function deposit(
@@ -152,6 +159,8 @@ async function openAccount(
 
         accounts,
 
+        exchangeRates,
+
         isLoading,
 
         openAccount,
@@ -162,6 +171,7 @@ async function openAccount(
 
       [
         accounts,
+        exchangeRates,
         isLoading,
       ]
     );
