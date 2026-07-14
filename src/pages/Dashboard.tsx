@@ -61,7 +61,26 @@ export default function Dashboard() {
     }
 
   }
+  
+  async function handleDeposit(
+  accountId: number
+) {
 
+  try {
+
+    await deposit(accountId);
+
+  } catch (error) {
+
+    alert(
+      error instanceof Error
+        ? error.message
+        : "Unable to deposit"
+    );
+
+  }
+
+}
 
 
   if (isLoading) {
@@ -165,7 +184,7 @@ export default function Dashboard() {
 
         <AccountsList
           accounts={accounts}
-          onDeposit={deposit}
+          onDeposit={handleDeposit}
         />
 
 
